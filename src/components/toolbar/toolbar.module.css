@@ -1,0 +1,68 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.button {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button.success {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+.button.error {
+  background-color: var(--error);
+  border-color: var(--error);
+  color: white;
+}
+
+.themeToggle {
+  min-width: 100px;
+}
+
+@media (max-width: 600px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .buttonGroup {
+    justify-content: center;
+  }
+
+  .themeToggle {
+    width: 100%;
+  }
+}

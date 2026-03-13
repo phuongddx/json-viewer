@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.viewer {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  background-color: var(--bg-secondary);
+}
+
+/* Override @textea/json-viewer styles for dark theme compatibility */
+.viewer :global(.json-viewer) {
+  background-color: transparent !important;
+  color: var(--text-primary) !important;
+}
+
+.viewer :global(.json-key) {
+  color: #7eb8da !important;
+}
+
+.viewer :global(.json-string) {
+  color: #98c379 !important;
+}
+
+.viewer :global(.json-number) {
+  color: #d19a66 !important;
+}
+
+.viewer :global(.json-boolean) {
+  color: #c678dd !important;
+}
+
+.viewer :global(.json-null) {
+  color: #e06c75 !important;
+}

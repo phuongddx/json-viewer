@@ -1,0 +1,123 @@
+.dropZone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--bg-secondary);
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropZone:hover {
+  border-color: var(--text-secondary);
+  background-color: var(--accent);
+}
+
+.dropZone:focus {
+  outline: 2px solid var(--text-secondary);
+  outline-offset: 2px;
+}
+
+.dragOver {
+  border-color: var(--success);
+  background-color: rgba(76, 175, 80, 0.1);
+  transform: scale(1.02);
+}
+
+.error {
+  border-color: var(--error);
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.placeholder {
+  color: var(--text-secondary);
+}
+
+.mainText {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.subText {
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.hint {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.loading {
+  color: var(--text-primary);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--success);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.success {
+  color: var(--success);
+}
+
+.success .icon {
+  color: var(--success);
+}
+
+.errorContent {
+  color: var(--error);
+}
+
+.errorContent .icon {
+  color: var(--error);
+}
+
+.clearBtn {
+  margin-top: 16px;
+  padding: 8px 16px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.clearBtn:hover {
+  background-color: var(--accent);
+  border-color: var(--text-secondary);
+}
+
+.clearBtn:focus {
+  outline: 2px solid var(--text-secondary);
+  outline-offset: 2px;
+}
