@@ -1,13 +1,20 @@
 import type { ChangeEvent } from 'react'
 import styles from './json-input.module.css'
+import { FixSuggestionBanner } from './fix-suggestion-banner'
 
 export interface JsonInputProps {
   value: string
   error: string | null
   isValid: boolean
   onChange: (text: string) => void
-  onFormat: () => void
+  onBeautify: () => void
+  onMinify: () => void
   onClear: () => void
+  // Fix suggestion props (optional — not needed in compare mode)
+  hasFixAvailable?: boolean
+  onApplyFix?: () => void
+  onUndo?: () => void
+  canUndo?: boolean
   placeholder?: string
 }
 
@@ -16,8 +23,13 @@ export function JsonInput({
   error,
   isValid,
   onChange,
-  onFormat,
+  onBeautify,
+  onMinify,
   onClear,
+  hasFixAvailable = false,
+  onApplyFix,
+  onUndo,
+  canUndo = false,
   placeholder = 'Paste your JSON here...',
 }: JsonInputProps) {
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -25,10 +37,10 @@ export function JsonInput({
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // Format on Cmd/Ctrl + Shift + F
+    // Beautify on Cmd/Ctrl + Shift + F
     if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'f') {
       e.preventDefault()
-      onFormat()
+      onBeautify()
     }
   }
 
@@ -39,11 +51,19 @@ export function JsonInput({
         <div className={styles.actions}>
           <button
             className={styles.button}
-            onClick={onFormat}
+            onClick={onBeautify}
             disabled={!isValid}
-            title="Format JSON (Cmd+Shift+F)"
+            title="Beautify JSON (Cmd+Shift+F)"
           >
-            Format
+            Beautify
+          </button>
+          <button
+            className={styles.button}
+            onClick={onMinify}
+            disabled={!isValid}
+            title="Minify JSON"
+          >
+            Minify
           </button>
           <button
             className={styles.button}
@@ -71,6 +91,14 @@ export function JsonInput({
           <div className={styles.errorTitle}>Parse Error</div>
           <div className={styles.errorMessage}>{error}</div>
         </div>
+      )}
+
+      {error && hasFixAvailable && onApplyFix && onUndo && (
+        <FixSuggestionBanner
+          onApplyFix={onApplyFix}
+          onUndo={onUndo}
+          canUndo={canUndo}
+        />
       )}
 
       {value && !error && (

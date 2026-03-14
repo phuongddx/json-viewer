@@ -1,10 +1,12 @@
 import { useState, useCallback, useMemo } from 'react'
 
 /**
- * Hook for managing JSON state with parsing and error handling
+ * Hook for managing JSON state with parsing, error handling, beautify/minify, and undo
  */
 export function useJsonState(initialValue: string = '') {
   const [rawText, setRawText] = useState(initialValue)
+  // Stores previous text for single-level undo after beautify/minify/fix
+  const [previousText, setPreviousText] = useState<string | null>(null)
 
   const { parsedJson, error } = useMemo(() => {
     if (!rawText.trim()) {
@@ -24,20 +26,46 @@ export function useJsonState(initialValue: string = '') {
     setRawText(text)
   }, [])
 
-  const formatJson = useCallback(() => {
+  const beautifyJson = useCallback(() => {
     if (!rawText.trim() || error) return
 
     try {
       const parsed = JSON.parse(rawText)
-      const formatted = JSON.stringify(parsed, null, 2)
-      setRawText(formatted)
+      setPreviousText(rawText)
+      setRawText(JSON.stringify(parsed, null, 2))
     } catch {
       // Error already handled by useMemo
     }
   }, [rawText, error])
 
+  const minifyJson = useCallback(() => {
+    if (!rawText.trim() || error) return
+
+    try {
+      const parsed = JSON.parse(rawText)
+      setPreviousText(rawText)
+      setRawText(JSON.stringify(parsed))
+    } catch {
+      // Error already handled by useMemo
+    }
+  }, [rawText, error])
+
+  /** Applies a repaired text, storing current text for undo */
+  const applyFix = useCallback((repairedText: string) => {
+    setPreviousText(rawText)
+    setRawText(repairedText)
+  }, [rawText])
+
+  const undoText = useCallback(() => {
+    if (previousText !== null) {
+      setRawText(previousText)
+      setPreviousText(null)
+    }
+  }, [previousText])
+
   const clearAll = useCallback(() => {
     setRawText('')
+    setPreviousText(null)
   }, [])
 
   const isValid = useMemo(() => {
@@ -49,8 +77,12 @@ export function useJsonState(initialValue: string = '') {
     parsedJson,
     error,
     isValid,
+    previousText,
     updateText,
-    formatJson,
+    beautifyJson,
+    minifyJson,
+    applyFix,
+    undoText,
     clearAll,
   }
 }

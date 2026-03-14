@@ -128,3 +128,39 @@
 .statusInvalid {
   color: var(--error);
 }
+
+/* Fix suggestion banner — shown when jsonrepair can heal invalid JSON */
+.fixBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 14px;
+  background-color: var(--warning-subtle);
+  border: 1px solid var(--warning);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.fixBannerText {
+  font-size: 12px;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.fixBannerActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.buttonFix {
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+.buttonFix:hover:not(:disabled) {
+  background-color: var(--warning-subtle);
+  border-color: var(--warning);
+  color: var(--warning);
+}
