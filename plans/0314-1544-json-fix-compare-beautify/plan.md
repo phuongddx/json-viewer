@@ -1,6 +1,7 @@
 ---
-status: pending
+status: completed
 created: 2026-03-14
+completed: 2026-03-14
 slug: json-fix-compare-beautify
 ---
 
@@ -23,9 +24,9 @@ Add 3 features to JSON Viewer:
 
 | # | Phase | Status | Effort | Deps |
 |---|-------|--------|--------|------|
-| 1 | [Install deps + Minify/Beautify](./phase-01-minify-beautify.md) | pending | S | — |
-| 2 | [Smart fix suggestions](./phase-02-fix-suggestions.md) | pending | M | P1 |
-| 3 | [Side-by-side comparison](./phase-03-json-compare.md) | pending | L | P1 |
+| 1 | [Install deps + Minify/Beautify](./phase-01-minify-beautify.md) | completed ✓ | S | — |
+| 2 | [Smart fix suggestions](./phase-02-fix-suggestions.md) | completed ✓ | M | P1 |
+| 3 | [Side-by-side comparison](./phase-03-json-compare.md) | completed ✓ | L | P1 |
 
 ## File Ownership
 

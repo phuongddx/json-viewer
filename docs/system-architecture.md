@@ -1,6 +1,6 @@
 # System Architecture
 
-**Version:** 0.1.0
+**Version:** 0.2.0-dev
 **Last Updated:** 2026-03-14
 **Architecture Type:** Client-side React application (no backend)
 
@@ -50,21 +50,30 @@ Vercel Analytics: Client-side only (no PII collected).
 ```
 App (root)
 ├─ theme state
-├─ useJsonState() → { rawText, parsedJson, error, isValid }
+├─ mode state ('view' | 'compare') (NEW)
+├─ useJsonState() → { rawText, parsedJson, error, isValid, ... }
+├─ useJsonRepair() → fix suggestion (NEW, view mode)
+├─ useJsonCompare() → dual JSON + diff (NEW, compare mode)
 ├─ useEffect() → applies theme to <html data-theme>
 │
-├─ Layout (composition wrapper)
+├─ Layout (composition wrapper; sidebar now optional)
 │  │
 │  ├─ header slot
-│  │  └─ Header (title, theme toggle)
-│  │     └─ button onClick={toggleTheme}
-│  │        └─ updates App state → useEffect reapplies theme
-│  │
-│  ├─ sidebar slot
+│  │  ├─ Header (title, View|Compare mode toggle, theme toggle)
+│  │  │  ├─ button "View" onClick={() => setMode('view')}
+│  │  │  ├─ button "Compare" onClick={() => setMode('compare')}
+│  │  │  └─ button toggleTheme
+│  │  │     └─ updates App state → useEffect reapplies theme
 │  │  │
-│  │  ├─ JsonInput
+│  ├─ sidebar slot (hidden when mode='compare')
+│  │  │
+│  │  ├─ JsonInput (view mode only)
 │  │  │  ├─ textarea value={rawText} onChange={updateText}
-│  │  │  ├─ button "Format" onClick={formatJson}
+│  │  │  ├─ button "Beautify" onClick={beautifyJson}
+│  │  │  ├─ button "Minify" onClick={minifyJson}
+│  │  │  ├─ FixSuggestionBanner (if error && fixAvailable) (NEW)
+│  │  │  │  ├─ button "Apply Fix" onClick={applyFix}
+│  │  │  │  └─ button "Undo" onClick={undoText}
 │  │  │  ├─ button "Clear" onClick={clearAll}
 │  │  │  └─ Displays error message (if isValid = false)
 │  │  │
@@ -78,23 +87,41 @@ App (root)
 │  │     ├─ displays success (if data loaded)
 │  │     └─ onDataLoaded callback → parent App
 │  │        └─ App.handleDataLoaded(data)
-│  │           └─ formatJson() → updateText() → rawText changes
+│  │           └─ beautifyJson() → updateText() → rawText changes
 │  │
 │  └─ main slot
-│     ├─ Placeholder (if !parsedJson)
-│     │  └─ Icon + "No JSON to display"
+│     ├─ View mode (if mode='view'):
+│     │  ├─ Placeholder (if !parsedJson)
+│     │  │  └─ Icon + "No JSON to display"
+│     │  │
+│     │  └─ JsonViewerComponent (if parsedJson)
+│     │     ├─ Toolbar
+│     │     │  ├─ button "Copy JSON" onClick={copy}
+│     │     │  ├─ button "Expand All" onClick={expand}
+│     │     │  └─ button "Collapse All" onClick={collapse}
+│     │     │
+│     │     └─ @textea/json-viewer
+│     │        └─ Interactive tree rendering of parsedJson
+│     │           ├─ Expandable nodes
+│     │           ├─ Syntax highlighting (via component)
+│     │           └─ Click handlers for node selection
 │     │
-│     └─ JsonViewerComponent (if parsedJson)
-│        ├─ Toolbar
-│        │  ├─ button "Copy JSON" onClick={copy}
-│        │  ├─ button "Expand All" onClick={expand}
-│        │  └─ button "Collapse All" onClick={collapse}
-│        │
-│        └─ @textea/json-viewer
-│           └─ Interactive tree rendering of parsedJson
-│              ├─ Expandable nodes
-│              ├─ Syntax highlighting (via component)
-│              └─ Click handlers for node selection
+│     └─ Compare mode (if mode='compare'): (NEW)
+│        └─ JsonCompare
+│           ├─ Two JsonInput panels (side-by-side)
+│           │  ├─ Left panel: leftText / setLeftText
+│           │  ├─ Right panel: rightText / setRightText
+│           │  ├─ Each has Beautify + Minify + Clear
+│           │  └─ No fix suggestions in compare mode
+│           │
+│           └─ DiffOutput (below panels)
+│              ├─ Message if either input invalid
+│              ├─ "JSONs are identical" if same
+│              └─ Semantic diff (color-coded)
+│                 ├─ Added fields (green)
+│                 ├─ Removed fields (red)
+│                 ├─ Modified fields (yellow)
+│                 └─ jsondiffpatch HTML output
 ```
 
 ## State Management Architecture
@@ -442,8 +469,9 @@ Max 10 MB to prevent browser memory exhaustion.
 2. **No search/filter** — Planned for v0.2.0
 3. **No JSON Schema validation** — Planned for v0.3.0
 4. **Clipboard paste** — Only works when no input focused
-5. **Mobile breakpoints** — Partial; polish in v0.2.0
+5. **Mobile breakpoints** — Partial; compare mode stacks vertically on mobile
 6. **No syntax coloring in textarea** — Considered for v0.2.0
+7. **Compare mode** — No file drop or paste into panels; manual entry only
 
 ## Future Architecture Considerations
 

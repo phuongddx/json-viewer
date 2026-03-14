@@ -1,6 +1,6 @@
 # Phase 1: Install Dependencies + Minify/Beautify
 
-**Priority:** High | **Status:** pending | **Effort:** Small
+**Priority:** High | **Status:** completed | **Effort:** Small
 
 ## Overview
 Install new deps (`jsonrepair`, `jsondiffpatch`) and replace the single "Format" button with "Beautify" + "Minify" buttons.
@@ -79,12 +79,12 @@ npm run build
 ```
 
 ## Todo
-- [ ] Install jsonrepair + jsondiffpatch
-- [ ] Add minifyJson, undoText, previousText to use-json-state
-- [ ] Rename formatJson → beautifyJson
-- [ ] Update JsonInput props + buttons
-- [ ] Update App.tsx prop names
-- [ ] Verify build passes
+- [x] Install jsonrepair + jsondiffpatch
+- [x] Add minifyJson, undoText, previousText to use-json-state
+- [x] Rename formatJson → beautifyJson
+- [x] Update JsonInput props + buttons
+- [x] Update App.tsx prop names
+- [x] Verify build passes
 
 ## Related Files
 - `src/hooks/use-json-state.ts` (modify)

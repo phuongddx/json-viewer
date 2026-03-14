@@ -1,10 +1,10 @@
 # Project Roadmap
 
 **Last Updated:** 2026-03-14
-**Current Version:** v0.1.0
-**Next Release:** v0.2.0 (targeted Q2 2026)
+**Current Version:** v0.2.0-dev (released features bundled for v0.2.0)
+**Next Release:** v0.2.0 (complete with testing, responsive design)
 
-## v0.1.0 — Initial Release (Current)
+## v0.1.0 — Initial Release
 
 **Status:** Complete ✓
 
@@ -25,11 +25,48 @@
 - [x] ESLint strict configuration
 - [x] Basic documentation (README, code standards, architecture)
 
+---
+
+## v0.2.0 — JSON Tools & Testing (In Progress)
+
+**Status:** Core features complete; testing/polish ongoing
+
+### Completed Features (New in v0.2.0)
+
+- [x] **Beautify + Minify JSON**
+  - Replaced single "Format" button with two buttons
+  - Beautify: JSON.stringify with 2-space indent
+  - Minify: JSON.stringify compact format
+
+- [x] **Smart Fix Suggestions**
+  - Detects common JSON errors (trailing commas, unquoted keys, etc.)
+  - Shows "Fix available" banner when invalid JSON can be repaired
+  - Apply Fix button replaces input immediately
+  - Undo support restores previous text
+
+- [x] **Side-by-Side JSON Comparison**
+  - View|Compare tab toggle in header
+  - Compare mode: two input panels + semantic diff output
+  - Color-coded diff (green=added, red=removed, yellow=modified)
+  - Displays "JSONs are identical" when both are same
+
+### Completed Implementation
+
+- [x] `useJsonRepair()` hook wrapping `jsonrepair` library
+- [x] `useJsonCompare()` hook wrapping `jsondiffpatch` library
+- [x] `FixSuggestionBanner` component
+- [x] `JsonCompare` container component
+- [x] `DiffOutput` semantic diff renderer
+- [x] Optional sidebar in Layout (full-width main in compare mode)
+- [x] Mode toggle buttons in header
+- [x] Warning CSS variables for fix suggestion styling
+- [x] Build verification (npm run build ✓)
+
 ### Known Limitations
 
-- No automated tests (no Vitest)
-- @mui/material installed but unused
-- Mobile breakpoints partially defined
+- No automated tests yet (Vitest setup planned)
+- Compare mode: no file drop/paste into panels
+- Mobile breakpoints partially optimized (compare mode stacks)
 - No search/filter functionality
 - No JSON path copy (copy full JSON only)
 - No syntax highlighting in textarea
@@ -37,13 +74,13 @@
 
 ---
 
-## v0.2.0 — Polish & Testing (Planned)
+## v0.2.0 — Polish & Testing (Continuation)
 
-**Target Release:** Q2 2026
+**Target Release:** Q2 2026 (core features complete, testing in progress)
 **Priority:** High
 **Owner:** TBD
 
-### Testing & Quality
+### Remaining Tasks
 
 - [ ] **Vitest Setup**
   - Configure vitest.config.ts
@@ -52,17 +89,22 @@
   - GitHub Actions CI/CD for tests
 
 - [ ] **Component Unit Tests**
-  - JsonInput validation and formatting
+  - JsonInput validation and formatting + beautify/minify
+  - FixSuggestionBanner apply/undo
+  - JsonCompare dual inputs + diff
   - FileDropZone file handling (all 3 methods)
   - JsonViewerComponent expand/collapse
   - Toolbar copy functionality
-  - useJsonState hook behavior
+  - useJsonState, useJsonRepair, useJsonCompare hook behavior
 
 - [ ] **Integration Tests**
   - Drag-drop file → parse → display flow
   - Theme toggle persistence (localStorage)
   - Paste event handling
   - Error state transitions
+  - Fix suggestion flow
+  - Compare mode switching
+  - Diff accuracy with jsondiffpatch
 
 ### Mobile & Responsive Design
 
@@ -198,7 +240,7 @@
 | Version | Target Date | Status | Owner |
 |---------|------------|--------|-------|
 | v0.1.0  | 2026-03-14 | ✓ Complete | - |
-| v0.2.0  | Q2 2026 (May-Jun) | Planned | TBD |
+| v0.2.0  | Q2 2026 (May-Jun) | Core features ✓; Testing in progress | TBD |
 | v0.3.0  | Q3 2026 (Jul-Sep) | Planned | TBD |
 | v0.4.0+ | Beyond Q3 2026 | Ideas | TBD |
 
@@ -246,12 +288,14 @@
   "@textea/json-viewer": "^3.0.0",
   "@emotion/react": "^11.14.0",
   "@mui/material": "^7.3.9",
+  "jsonrepair": "^3.4.2",              // NEW: Smart JSON repair
+  "jsondiffpatch": "^0.6.0",           // NEW: Semantic JSON diff
   "react": "^18.2.0",
   "react-dom": "^18.2.0"
 }
 ```
 
-### Planned Additions (v0.2.0+)
+### Planned Additions (v0.2.0+ continuation)
 
 - `vitest` — Testing framework
 - `react-testing-library` — Component testing
