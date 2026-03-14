@@ -1,46 +1,50 @@
 .dropZone {
   border: 2px dashed var(--border);
-  border-radius: 12px;
-  padding: 40px;
+  border-radius: var(--radius-lg);
+  padding: 24px 16px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: var(--bg-secondary);
-  min-height: 200px;
+  background-color: transparent;
+  min-height: 130px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .dropZone:hover {
-  border-color: var(--text-secondary);
-  background-color: var(--accent);
+  border-color: var(--accent);
+  background-color: var(--accent-subtle);
 }
 
-.dropZone:focus {
-  outline: 2px solid var(--text-secondary);
+.dropZone:focus-visible {
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
+  border-color: var(--accent);
 }
 
+/* Highlight with blue when dragging over */
 .dragOver {
-  border-color: var(--success);
-  background-color: rgba(76, 175, 80, 0.1);
-  transform: scale(1.02);
+  border-color: var(--accent);
+  background-color: var(--accent-subtle);
+  transform: scale(1.01);
 }
 
 .error {
   border-color: var(--error);
-  background-color: rgba(244, 67, 54, 0.1);
+  background-color: var(--error-subtle);
 }
 
 .hiddenInput {
   display: none;
 }
 
+/* SVG icon wrapper */
 .icon {
-  font-size: 48px;
-  display: block;
-  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  color: var(--text-muted);
 }
 
 .placeholder {
@@ -48,39 +52,50 @@
 }
 
 .mainText {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .subText {
-  font-size: 14px;
-  margin-bottom: 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
 }
 
 .hint {
-  font-size: 12px;
-  opacity: 0.7;
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
 .loading {
   color: var(--text-primary);
 }
 
+/* Spinner uses accent color for the active arc */
 .spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--border);
-  border-top-color: var(--success);
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 16px;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 12px;
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+    opacity: 0.6;
+  }
+
+  .dragOver {
+    transform: none;
   }
 }
 
@@ -88,7 +103,10 @@
   color: var(--success);
 }
 
-.success .icon {
+.successIcon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
   color: var(--success);
 }
 
@@ -96,28 +114,31 @@
   color: var(--error);
 }
 
-.errorContent .icon {
+.errorIcon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
   color: var(--error);
 }
 
 .clearBtn {
-  margin-top: 16px;
-  padding: 8px 16px;
-  background-color: var(--bg-secondary);
+  margin-top: 12px;
+  padding: 5px 16px;
+  background-color: transparent;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text-primary);
+  border-radius: 20px;
+  color: var(--text-secondary);
   cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
+  font-size: 12px;
 }
 
 .clearBtn:hover {
-  background-color: var(--accent);
-  border-color: var(--text-secondary);
+  border-color: var(--accent);
+  color: var(--accent);
+  background-color: var(--accent-subtle);
 }
 
-.clearBtn:focus {
-  outline: 2px solid var(--text-secondary);
+.clearBtn:focus-visible {
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }

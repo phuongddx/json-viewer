@@ -8,6 +8,34 @@ import styles from './App.module.css'
 
 type Theme = 'light' | 'dark'
 
+/* Inline SVG icons — no emoji, no external dependency */
+const SunIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="5" />
+    <line x1="12" y1="1" x2="12" y2="3" />
+    <line x1="12" y1="21" x2="12" y2="23" />
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+    <line x1="1" y1="12" x2="3" y2="12" />
+    <line x1="21" y1="12" x2="23" y2="12" />
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+  </svg>
+)
+
+const MoonIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+  </svg>
+)
+
+const JsonPlaceholderIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="16 18 22 12 16 6" />
+    <polyline points="8 6 2 12 8 18" />
+  </svg>
+)
+
 function App() {
   const [theme, setTheme] = useState<Theme>('dark')
   const {
@@ -20,7 +48,7 @@ function App() {
     clearAll,
   } = useJsonState()
 
-  // Apply theme to document
+  // Apply theme to document root
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
@@ -29,7 +57,6 @@ function App() {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
   }, [])
 
-  // Handle data loaded from file drop zone
   const handleDataLoaded = useCallback(
     (data: unknown) => {
       if (data) {
@@ -40,19 +67,25 @@ function App() {
     [updateText]
   )
 
-  // Render header
   const header = (
     <div className={styles.header}>
-      <h1 className={styles.title}>JSON Viewer</h1>
+      <h1 className={styles.title}>
+        <span className={styles.titleBrace}>{'{'}</span>
+        JSON Viewer
+        <span className={styles.titleBrace}>{'}'}</span>
+      </h1>
       <div className={styles.headerActions}>
-        <button className={styles.themeBtn} onClick={toggleTheme} title="Toggle theme">
-          {theme === 'dark' ? '☀️' : '🌙'}
+        <button
+          className={styles.themeBtn}
+          onClick={toggleTheme}
+          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        >
+          {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
         </button>
       </div>
     </div>
   )
 
-  // Render sidebar with input and file drop
   const sidebar = (
     <div className={styles.sidebar}>
       <div className={styles.inputSection}>
@@ -71,7 +104,6 @@ function App() {
     </div>
   )
 
-  // Render main content with viewer
   const main = (
     <div className={styles.main}>
       {parsedJson ? (
@@ -83,9 +115,11 @@ function App() {
       ) : (
         <div className={styles.placeholder}>
           <div className={styles.placeholderContent}>
-            <span className={styles.placeholderIcon}>📋</span>
+            <div className={styles.placeholderIcon}>
+              <JsonPlaceholderIcon />
+            </div>
             <h2>No JSON to display</h2>
-            <p>Paste JSON in the input area or drag & drop a file</p>
+            <p>Paste JSON in the input area or drag &amp; drop a file</p>
           </div>
         </div>
       )}

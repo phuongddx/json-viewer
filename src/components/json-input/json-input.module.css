@@ -3,49 +3,59 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  gap: 12px;
+  gap: 8px;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  background-color: var(--bg-secondary);
-  border-radius: 8px;
+  padding: 8px 12px;
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
 .title {
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  align-items: center;
 }
 
 .button {
-  padding: 6px 12px;
+  padding: 4px 10px;
   font-size: 12px;
   font-weight: 500;
   border: 1px solid var(--border);
-  border-radius: 4px;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .button:hover:not(:disabled) {
-  background-color: var(--accent);
+  background-color: var(--accent-subtle);
   border-color: var(--accent);
+  color: var(--accent);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
@@ -56,53 +66,59 @@
   min-height: 0;
 }
 
+/* Monospace textarea with blue focus glow */
 .textarea {
   flex: 1;
   width: 100%;
-  padding: 16px;
-  font-family: 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+  padding: 14px;
+  font-family: 'Fira Code', 'SF Mono', 'Monaco', 'Consolas', monospace;
   font-size: 13px;
-  line-height: 1.5;
-  background-color: var(--bg-secondary);
+  line-height: 1.6;
+  background-color: var(--bg-primary);
   color: var(--text-primary);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   resize: none;
   outline: none;
 }
 
 .textarea:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
 }
 
 .textarea::placeholder {
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .errorContainer {
-  padding: 12px 16px;
-  background-color: rgba(244, 67, 54, 0.1);
+  padding: 10px 14px;
+  background-color: var(--error-subtle);
   border: 1px solid var(--error);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
 }
 
 .errorTitle {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--error);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .errorMessage {
   font-size: 12px;
   color: var(--text-primary);
-  font-family: 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+  font-family: 'Fira Code', 'SF Mono', 'Monaco', 'Consolas', monospace;
   word-break: break-word;
+  line-height: 1.5;
 }
 
 .status {
   font-size: 11px;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .statusValid {

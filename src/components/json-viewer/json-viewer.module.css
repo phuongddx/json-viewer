@@ -4,39 +4,62 @@
   flex: 1;
   overflow: hidden;
   background-color: var(--bg-primary);
-  border-radius: 8px;
-  border: 1px solid var(--border);
 }
 
+/* Monospace viewer with generous line-height for readability */
 .viewer {
   flex: 1;
   overflow: auto;
-  padding: 16px;
-  background-color: var(--bg-secondary);
+  padding: 20px;
+  font-family: 'Fira Code', 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.7;
 }
 
-/* Override @textea/json-viewer styles for dark theme compatibility */
+/* Override @textea/json-viewer internals */
 .viewer :global(.json-viewer) {
   background-color: transparent !important;
   color: var(--text-primary) !important;
 }
 
+/* Syntax highlight — tuned for both dark and light themes via CSS vars */
 .viewer :global(.json-key) {
-  color: #7eb8da !important;
+  color: #60A5FA !important; /* blue-400 */
 }
 
 .viewer :global(.json-string) {
-  color: #98c379 !important;
+  color: #34D399 !important; /* emerald-400 */
 }
 
 .viewer :global(.json-number) {
-  color: #d19a66 !important;
+  color: #FBBF24 !important; /* amber-400 */
 }
 
 .viewer :global(.json-boolean) {
-  color: #c678dd !important;
+  color: #A78BFA !important; /* violet-400 */
 }
 
 .viewer :global(.json-null) {
-  color: #e06c75 !important;
+  color: #F87171 !important; /* red-400 */
+}
+
+/* Lighten syntax colors for light theme readability */
+[data-theme="light"] .viewer :global(.json-key) {
+  color: #2563EB !important; /* blue-600 */
+}
+
+[data-theme="light"] .viewer :global(.json-string) {
+  color: #059669 !important; /* emerald-600 */
+}
+
+[data-theme="light"] .viewer :global(.json-number) {
+  color: #D97706 !important; /* amber-600 */
+}
+
+[data-theme="light"] .viewer :global(.json-boolean) {
+  color: #7C3AED !important; /* violet-700 */
+}
+
+[data-theme="light"] .viewer :global(.json-null) {
+  color: #DC2626 !important; /* red-600 */
 }
