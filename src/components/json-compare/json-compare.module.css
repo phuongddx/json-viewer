@@ -1,0 +1,98 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.panels {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  gap: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panel {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  padding: 0.75rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.panel:last-child {
+  border-right: none;
+}
+
+/* Diff output section — scrollable, capped height */
+.diffSection {
+  flex-shrink: 0;
+  max-height: 40%;
+  overflow: auto;
+  border-top: 1px solid var(--border);
+  background-color: var(--bg-secondary);
+}
+
+.diffPlaceholder {
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.diffIdentical {
+  color: var(--success);
+}
+
+/* jsondiffpatch HTML output — theme-aware color overrides */
+.diffHtml {
+  padding: 1rem 1.25rem;
+  font-family: 'Fira Code', 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.diffHtml :global(.jsondiffpatch-added) .diffHtml :global(.jsondiffpatch-value),
+.diffHtml :global(.jsondiffpatch-added) {
+  background-color: var(--success-subtle);
+}
+
+.diffHtml :global(.jsondiffpatch-deleted) .diffHtml :global(.jsondiffpatch-value),
+.diffHtml :global(.jsondiffpatch-deleted) {
+  background-color: var(--error-subtle);
+  text-decoration: line-through;
+}
+
+.diffHtml :global(.jsondiffpatch-modified) {
+  background-color: var(--warning-subtle);
+}
+
+.diffHtml :global(.jsondiffpatch-unchanged) {
+  color: var(--text-muted);
+}
+
+/* Responsive: stack panels vertically on mobile */
+@media (max-width: 768px) {
+  .panels {
+    flex-direction: column;
+  }
+
+  .panel {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex: none;
+    min-height: 200px;
+  }
+
+  .panel:last-child {
+    border-bottom: none;
+  }
+
+  .diffSection {
+    max-height: none;
+  }
+}
