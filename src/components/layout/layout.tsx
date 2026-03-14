@@ -3,7 +3,7 @@ import styles from './layout.module.css'
 
 export interface LayoutProps {
   header: ReactNode
-  sidebar: ReactNode
+  sidebar: ReactNode | null
   main: ReactNode
   footer?: ReactNode
 }
@@ -15,10 +15,12 @@ export function Layout({ header, sidebar, main, footer }: LayoutProps) {
         {header}
       </header>
       <div className={styles.content}>
-        <aside className={styles.sidebar}>
-          {sidebar}
-        </aside>
-        <main className={styles.main}>
+        {sidebar && (
+          <aside className={styles.sidebar}>
+            {sidebar}
+          </aside>
+        )}
+        <main className={`${styles.main} ${!sidebar ? styles.mainFull : ''}`}>
           {main}
         </main>
       </div>

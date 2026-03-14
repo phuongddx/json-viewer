@@ -27,6 +27,40 @@
   align-items: center;
 }
 
+/* View/Compare tab toggle */
+.modeTabs {
+  display: flex;
+  gap: 2px;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+}
+
+.modeTab {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.modeTab:hover {
+  color: var(--text-primary);
+}
+
+.modeTabActive {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.modeTabActive:hover {
+  color: #fff;
+}
+
 /* Icon-only theme toggle button */
 .themeBtn {
   background: transparent;

@@ -3,10 +3,13 @@ import { Layout } from './components/layout'
 import { JsonInput } from './components/json-input'
 import { JsonViewerComponent } from './components/json-viewer/json-viewer-component'
 import { FileDropZone } from './components/file-drop-zone'
+import { JsonCompare } from './components/json-compare/json-compare'
 import { useJsonState } from './hooks/use-json-state'
+import { useJsonRepair } from './hooks/use-json-repair'
 import styles from './App.module.css'
 
 type Theme = 'light' | 'dark'
+type AppMode = 'view' | 'compare'
 
 /* Inline SVG icons — no emoji, no external dependency */
 const SunIcon = () => (
@@ -38,15 +41,24 @@ const JsonPlaceholderIcon = () => (
 
 function App() {
   const [theme, setTheme] = useState<Theme>('dark')
+  const [mode, setMode] = useState<AppMode>('view')
+
   const {
     rawText,
     parsedJson,
     error,
     isValid,
+    previousText,
     updateText,
-    formatJson,
+    beautifyJson,
+    minifyJson,
+    applyFix,
+    undoText,
     clearAll,
   } = useJsonState()
+
+  // Attempt to repair invalid JSON when there's an error
+  const repairResult = useJsonRepair(rawText, !!error)
 
   // Apply theme to document root
   useEffect(() => {
@@ -75,6 +87,21 @@ function App() {
         <span className={styles.titleBrace}>{'}'}</span>
       </h1>
       <div className={styles.headerActions}>
+        {/* View / Compare mode tabs */}
+        <div className={styles.modeTabs}>
+          <button
+            className={`${styles.modeTab} ${mode === 'view' ? styles.modeTabActive : ''}`}
+            onClick={() => setMode('view')}
+          >
+            View
+          </button>
+          <button
+            className={`${styles.modeTab} ${mode === 'compare' ? styles.modeTabActive : ''}`}
+            onClick={() => setMode('compare')}
+          >
+            Compare
+          </button>
+        </div>
         <button
           className={styles.themeBtn}
           onClick={toggleTheme}
@@ -94,8 +121,13 @@ function App() {
           error={error}
           isValid={isValid}
           onChange={updateText}
-          onFormat={formatJson}
+          onBeautify={beautifyJson}
+          onMinify={minifyJson}
           onClear={clearAll}
+          hasFixAvailable={!!repairResult}
+          onApplyFix={() => repairResult && applyFix(repairResult.repairedText)}
+          onUndo={undoText}
+          canUndo={previousText !== null}
         />
       </div>
       <div className={styles.dropSection}>
@@ -127,7 +159,11 @@ function App() {
   )
 
   return (
-    <Layout header={header} sidebar={sidebar} main={main} />
+    <Layout
+      header={header}
+      sidebar={mode === 'view' ? sidebar : null}
+      main={mode === 'view' ? main : <JsonCompare />}
+    />
   )
 }
 
