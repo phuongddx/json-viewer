@@ -16,6 +16,7 @@ JSON Viewer is a stateless, client-side React application. All JSON parsing, val
 │  ┌───────────────────────────────────────────────┐  │
 │  │              React Application                │  │
 │  │  (App.tsx + Components + Hooks + State)       │  │
+│  │  + Analytics + SpeedInsights (root level)     │  │
 │  └───────────────────────────────────────────────┘  │
 │                        ↓                            │
 │  ┌──────────────┐  ┌──────────────┐               │
@@ -32,10 +33,16 @@ JSON Viewer is a stateless, client-side React application. All JSON parsing, val
 │  │          Browser File API (FileReader)        │  │
 │  │          Clipboard API (Paste Events)         │  │
 │  └───────────────────────────────────────────────┘  │
+│                        ↓                            │
+│  ┌───────────────────────────────────────────────┐  │
+│  │    Vercel Analytics Edge Functions            │  │
+│  │  (page views, Web Vitals → Vercel dashboard)  │  │
+│  └───────────────────────────────────────────────┘  │
 │                                                     │
 └─────────────────────────────────────────────────────┘
 
 No server, API, database, or backend services.
+Vercel Analytics: Client-side only (no PII collected).
 ```
 
 ## Component Tree & Data Flow
@@ -321,6 +328,31 @@ export function JsonViewerComponent({ data, theme }) {
   )
 }
 ```
+
+### Vercel Analytics & Speed Insights
+
+**Purpose:** Monitor application performance and user engagement.
+
+**Components:**
+- `@vercel/analytics` — Tracks page views, route changes, Web Vitals
+- `@vercel/speed-insights` — Tracks Core Web Vitals (CLS, FID, LCP)
+
+**Usage:**
+```typescript
+// main.tsx
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+    <Analytics />          // Root-level, no props needed
+    <SpeedInsights />      // Root-level, no props needed
+  </React.StrictMode>,
+)
+```
+
+**Data:** Vercel Analytics is zero-code, client-side only. Does not collect PII. Dashboard accessible via Vercel project settings.
 
 **Note:** @mui/material is installed but not yet used in v0.1.0 (planned for v0.2.0).
 

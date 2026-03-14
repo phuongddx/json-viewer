@@ -64,6 +64,7 @@ JSON Viewer is a lightweight, web-based tool for viewing, navigating, and inspec
 | **Mobile** | Responsive to 375px width (polish in v0.2.0) | Partial |
 | **Accessibility** | WCAG 2.1 Level A | Met |
 | **Type Safety** | 100% TypeScript strict mode | Met |
+| **Monitoring** | Vercel Analytics for Web Vitals tracking | Implemented |
 
 ## Success Criteria
 

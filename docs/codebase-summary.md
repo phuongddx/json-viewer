@@ -9,7 +9,7 @@
 ```
 src/
 ├── App.tsx (135 LOC)                          # Root component, theme + layout
-├── main.tsx (11 LOC)                          # ReactDOM entry
+├── main.tsx (15 LOC)                          # ReactDOM entry + Vercel analytics
 ├── components/
 │   ├── layout/
 │   │   ├── layout.tsx (33 LOC)                # Generic flex layout wrapper
@@ -203,8 +203,10 @@ Cycle repeats (rawText updated)
 {
   "@emotion/react": "^11.14.0",
   "@emotion/styled": "^11.14.1",
-  "@mui/material": "^7.3.9",         // Installed, unused in v0.1.0
-  "@textea/json-viewer": "^3.0.0",    // Main tree viewer
+  "@mui/material": "^7.3.9",           // Installed, unused in v0.1.0
+  "@textea/json-viewer": "^3.0.0",     // Main tree viewer
+  "@vercel/analytics": "^2.0.1",       // User analytics & Web Vitals
+  "@vercel/speed-insights": "^2.0.0",  // Core Web Vitals monitoring
   "react": "^18.2.0",
   "react-dom": "^18.2.0"
 }
