@@ -3,10 +3,15 @@
  * Displays JSON data in an interactive tree view using @textea/json-viewer
  */
 
-import { useRef, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { JsonViewer } from '@textea/json-viewer'
 import { Toolbar } from '../toolbar/toolbar'
 import styles from './json-viewer.module.css'
+
+/** Default depth for initial tree expansion */
+const DEFAULT_DEPTH = 2
+/** Large depth value to expand all nodes */
+const EXPAND_ALL_DEPTH = 100
 
 interface JsonViewerComponentProps {
   data: unknown
@@ -15,24 +20,18 @@ interface JsonViewerComponentProps {
 }
 
 export function JsonViewerComponent({ data, theme = 'dark', onThemeChange }: JsonViewerComponentProps) {
-  const viewerRef = useRef<HTMLDivElement>(null)
+  const [inspectDepth, setInspectDepth] = useState(DEFAULT_DEPTH)
+  // Key forces JsonViewer remount to apply new defaultInspectDepth
+  const [viewerKey, setViewerKey] = useState(0)
 
   const handleExpandAll = useCallback(() => {
-    // @textea/json-viewer handles expand internally via collapse all button
-    // Simulate clicking expand buttons in the viewer
-    const expandButtons = viewerRef.current?.querySelectorAll('[aria-label*="expand"], [aria-label*="Expand"]')
-    expandButtons?.forEach((btn) => {
-      if (btn instanceof HTMLButtonElement) btn.click()
-    })
+    setInspectDepth(EXPAND_ALL_DEPTH)
+    setViewerKey((k) => k + 1)
   }, [])
 
   const handleCollapseAll = useCallback(() => {
-    // @textea/json-viewer handles collapse internally
-    // Simulate clicking collapse buttons in the viewer
-    const collapseButtons = viewerRef.current?.querySelectorAll('[aria-label*="collapse"], [aria-label*="Collapse"]')
-    collapseButtons?.forEach((btn) => {
-      if (btn instanceof HTMLButtonElement) btn.click()
-    })
+    setInspectDepth(0)
+    setViewerKey((k) => k + 1)
   }, [])
 
   const jsonString = JSON.stringify(data, null, 2)
@@ -46,11 +45,12 @@ export function JsonViewerComponent({ data, theme = 'dark', onThemeChange }: Jso
         theme={theme}
         onThemeChange={onThemeChange}
       />
-      <div className={styles.viewer} ref={viewerRef}>
+      <div className={styles.viewer}>
         <JsonViewer
+          key={viewerKey}
           value={data}
           theme={theme}
-          defaultInspectDepth={2}
+          defaultInspectDepth={inspectDepth}
           displayDataTypes={true}
           editable={false}
           enableClipboard={true}
