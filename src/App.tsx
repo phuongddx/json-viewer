@@ -42,6 +42,7 @@ const JsonPlaceholderIcon = () => (
 function App() {
   const [theme, setTheme] = useState<Theme>('dark')
   const [mode, setMode] = useState<AppMode>('view')
+  const [showFixDiff, setShowFixDiff] = useState(false)
 
   const {
     rawText,
@@ -120,14 +121,18 @@ function App() {
           value={rawText}
           error={error}
           isValid={isValid}
-          onChange={updateText}
+          onChange={(text) => { updateText(text); setShowFixDiff(false) }}
           onBeautify={beautifyJson}
           onMinify={minifyJson}
-          onClear={clearAll}
+          onClear={() => { clearAll(); setShowFixDiff(false) }}
           hasFixAvailable={!!repairResult}
-          onApplyFix={() => repairResult && applyFix(repairResult.repairedText)}
-          onUndo={undoText}
+          onApplyFix={() => { if (repairResult) { applyFix(repairResult.repairedText); setShowFixDiff(false) } }}
+          onUndo={() => { undoText(); setShowFixDiff(false) }}
           canUndo={previousText !== null}
+          fixOriginalText={rawText}
+          fixRepairedText={repairResult?.repairedText ?? ''}
+          showFixDiff={showFixDiff}
+          onToggleFixDiff={() => setShowFixDiff(v => !v)}
         />
       </div>
       <div className={styles.dropSection}>

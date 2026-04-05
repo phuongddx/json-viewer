@@ -15,6 +15,11 @@ export interface JsonInputProps {
   onApplyFix?: () => void
   onUndo?: () => void
   canUndo?: boolean
+  // Diff preview props (optional)
+  fixOriginalText?: string
+  fixRepairedText?: string
+  showFixDiff?: boolean
+  onToggleFixDiff?: () => void
   placeholder?: string
 }
 
@@ -30,6 +35,10 @@ export function JsonInput({
   onApplyFix,
   onUndo,
   canUndo = false,
+  fixOriginalText,
+  fixRepairedText,
+  showFixDiff,
+  onToggleFixDiff,
   placeholder = 'Paste your JSON here...',
 }: JsonInputProps) {
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -98,6 +107,10 @@ export function JsonInput({
           onApplyFix={onApplyFix}
           onUndo={onUndo}
           canUndo={canUndo}
+          originalText={fixOriginalText}
+          repairedText={fixRepairedText}
+          showDiff={showFixDiff}
+          onToggleDiff={onToggleFixDiff}
         />
       )}
 

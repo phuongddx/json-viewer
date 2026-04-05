@@ -1,0 +1,49 @@
+/* Scrollable diff container */
+.diffPreview {
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-primary);
+  font-family: 'Fira Code', 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.diffLine {
+  display: flex;
+  flex-direction: row;
+  padding: 1px 10px;
+  white-space: pre;
+  overflow: hidden;
+}
+
+.diffLineRemove {
+  color: var(--error);
+  background-color: var(--error-subtle);
+}
+
+.diffLineAdd {
+  color: var(--success);
+  background-color: var(--success-subtle);
+}
+
+.diffLineUnchanged {
+  color: var(--text-muted);
+}
+
+/* Fixed-width sign column — not selectable */
+.diffLinePrefix {
+  width: 16px;
+  margin-right: 8px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.diffLineTruncated {
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+  font-family: inherit;
+}

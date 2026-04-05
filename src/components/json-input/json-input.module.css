@@ -132,14 +132,21 @@
 /* Fix suggestion banner — shown when jsonrepair can heal invalid JSON */
 .fixBanner {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 8px;
   padding: 8px 14px;
   background-color: var(--warning-subtle);
   border: 1px solid var(--warning);
   border-radius: var(--radius-md);
   flex-shrink: 0;
+}
+
+/* Inner row: banner text + action buttons */
+.fixBannerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .fixBannerText {
@@ -163,4 +170,9 @@
   background-color: var(--warning-subtle);
   border-color: var(--warning);
   color: var(--warning);
+}
+
+.buttonPreview {
+  border-color: var(--accent);
+  color: var(--accent);
 }

@@ -15,8 +15,10 @@ src/
 │   │   ├── layout.tsx (38 LOC)                # Generic flex layout wrapper (optional sidebar)
 │   │   └── index.ts
 │   ├── json-input/
-│   │   ├── json-input.tsx (105 LOC)           # Textarea + beautify/minify/clear UI
-│   │   ├── fix-suggestion-banner.tsx (30 LOC) # Fix available banner (NEW)
+│   │   ├── json-input.tsx (115 LOC)           # Textarea + beautify/minify/clear UI
+│   │   ├── fix-suggestion-banner.tsx (45 LOC) # Fix available banner + diff toggle
+│   │   ├── fix-diff-preview.tsx (45 LOC)      # Line-level diff renderer (NEW)
+│   │   ├── fix-diff-preview.module.css        # Diff preview styles (NEW)
 │   │   ├── json-input.module.css
 │   │   └── index.ts
 │   ├── json-compare/
@@ -36,9 +38,12 @@ src/
 │       ├── toolbar.tsx (81 LOC)               # Copy/expand/collapse controls
 │       ├── toolbar.module.css
 │       └── index.ts
+├── utils/
+│   ├── text-diff.ts (45 LOC)                  # LCS-based line diff utility (NEW)
+│   └── text-diff.test.ts                      # Unit tests for diffLines (NEW)
 ├── hooks/
-│   ├── use-json-state.ts (85 LOC)             # Parse, beautify, minify, fix JSON (UPDATED)
-│   ├── use-json-repair.ts (25 LOC)            # Smart fix suggestions via jsonrepair (NEW)
+│   ├── use-json-state.ts (85 LOC)             # Parse, beautify, minify, fix JSON
+│   ├── use-json-repair.ts (25 LOC)            # Smart fix suggestions via jsonrepair
 │   ├── use-json-compare.ts (60 LOC)           # Dual JSON compare + diff (NEW)
 │   ├── use-file-import.ts (172 LOC)           # File read, drag-drop, paste
 │   └── index.ts
