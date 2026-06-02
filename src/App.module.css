@@ -107,6 +107,14 @@
   flex-shrink: 0;
 }
 
+.querySection {
+  flex-shrink: 0;
+}
+
+.statsSection {
+  flex-shrink: 0;
+}
+
 .main {
   height: 100%;
   display: flex;
