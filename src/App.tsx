@@ -4,6 +4,7 @@ import { JsonInput } from './components/json-input'
 import { JsonViewerComponent } from './components/json-viewer/json-viewer-component'
 import { FileDropZone } from './components/file-drop-zone'
 import { JsonCompare } from './components/json-compare/json-compare'
+import { JsonPathQuery } from './components/jsonpath-query'
 import { useJsonState } from './hooks/use-json-state'
 import { useJsonRepair } from './hooks/use-json-repair'
 import styles from './App.module.css'
@@ -138,6 +139,11 @@ function App() {
       <div className={styles.dropSection}>
         <FileDropZone onDataLoaded={handleDataLoaded} />
       </div>
+      {parsedJson && (
+        <div className={styles.querySection}>
+          <JsonPathQuery data={parsedJson} />
+        </div>
+      )}
     </div>
   )
 

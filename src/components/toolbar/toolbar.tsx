@@ -1,10 +1,13 @@
 /**
  * Toolbar component for JSON Viewer
- * Provides controls for copy, expand/collapse, download, and theme toggle
+ * Provides controls for copy, expand/collapse, download, theme toggle,
+ * view mode switching (tree/raw/split/table), and minify toggle
  */
 
 import { useState } from 'react'
 import styles from './toolbar.module.css'
+
+type ViewMode = 'tree' | 'raw' | 'split' | 'table'
 
 interface ToolbarProps {
   onExpandAll: () => void
@@ -12,9 +15,25 @@ interface ToolbarProps {
   jsonData: string
   theme?: 'light' | 'dark'
   onThemeChange?: (theme: 'light' | 'dark') => void
+  viewMode?: ViewMode
+  onViewModeChange?: (mode: ViewMode) => void
+  isMinified?: boolean
+  onMinifyToggle?: () => void
+  isTableAvailable?: boolean
 }
 
-export function Toolbar({ onExpandAll, onCollapseAll, jsonData, theme = 'dark', onThemeChange }: ToolbarProps) {
+export function Toolbar({
+  onExpandAll,
+  onCollapseAll,
+  jsonData,
+  theme = 'dark',
+  onThemeChange,
+  viewMode = 'tree',
+  onViewModeChange,
+  isMinified = false,
+  onMinifyToggle,
+  isTableAvailable = false,
+}: ToolbarProps) {
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle')
   const isDark = theme === 'dark'
 
@@ -58,6 +77,45 @@ export function Toolbar({ onExpandAll, onCollapseAll, jsonData, theme = 'dark', 
   return (
     <div className={styles.toolbar}>
       <div className={styles.buttonGroup}>
+        {onViewModeChange && (
+          <>
+            <button
+              onClick={() => onViewModeChange('tree')}
+              className={`${styles.button} ${viewMode === 'tree' ? styles.active : ''}`}
+              aria-label="Tree view"
+              aria-pressed={viewMode === 'tree'}
+            >
+              Tree
+            </button>
+            <button
+              onClick={() => onViewModeChange('raw')}
+              className={`${styles.button} ${viewMode === 'raw' ? styles.active : ''}`}
+              aria-label="Raw view"
+              aria-pressed={viewMode === 'raw'}
+            >
+              Raw
+            </button>
+            <button
+              onClick={() => onViewModeChange('split')}
+              className={`${styles.button} ${viewMode === 'split' ? styles.active : ''}`}
+              aria-label="Split view"
+              aria-pressed={viewMode === 'split'}
+            >
+              Split
+            </button>
+            {isTableAvailable && (
+              <button
+                onClick={() => onViewModeChange('table')}
+                className={`${styles.button} ${viewMode === 'table' ? styles.active : ''}`}
+                aria-label="Table view"
+                aria-pressed={viewMode === 'table'}
+              >
+                Table
+              </button>
+            )}
+            <span className={styles.separator} />
+          </>
+        )}
         <button
           onClick={handleCopy}
           className={`${styles.button} ${copyStatus === 'copied' ? styles.success : ''} ${copyStatus === 'error' ? styles.error : ''}`}
@@ -88,6 +146,16 @@ export function Toolbar({ onExpandAll, onCollapseAll, jsonData, theme = 'dark', 
         >
           Collapse All
         </button>
+        {onMinifyToggle && (
+          <button
+            onClick={onMinifyToggle}
+            className={`${styles.button} ${isMinified ? styles.active : ''}`}
+            aria-label={isMinified ? 'Show pretty-printed JSON' : 'Show minified JSON'}
+            aria-pressed={isMinified}
+          >
+            {isMinified ? 'Pretty' : 'Minify'}
+          </button>
+        )}
       </div>
       <button
         onClick={handleThemeToggle}
