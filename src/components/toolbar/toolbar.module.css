@@ -63,6 +63,26 @@
   min-width: 90px;
 }
 
+.active {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.active:hover {
+  background-color: var(--accent-hover, var(--accent));
+  border-color: var(--accent-hover, var(--accent));
+  color: white;
+}
+
+.separator {
+  width: 1px;
+  height: 24px;
+  background-color: var(--border);
+  margin: 0 4px;
+  align-self: center;
+}
+
 @media (max-width: 600px) {
   .toolbar {
     flex-direction: column;
