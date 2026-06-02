@@ -3,9 +3,12 @@ import { Layout } from './components/layout'
 import { JsonInput } from './components/json-input'
 import { JsonViewerComponent } from './components/json-viewer/json-viewer-component'
 import { FileDropZone } from './components/file-drop-zone'
+import { UrlFetch } from './components/url-fetch'
+import { StatsPanel } from './components/stats-panel'
 import { JsonCompare } from './components/json-compare/json-compare'
 import { useJsonState } from './hooks/use-json-state'
 import { useJsonRepair } from './hooks/use-json-repair'
+import { ShortcutsOverlay } from './components/shortcuts-overlay'
 import styles from './App.module.css'
 
 type Theme = 'light' | 'dark'
@@ -43,6 +46,7 @@ function App() {
   const [theme, setTheme] = useState<Theme>('dark')
   const [mode, setMode] = useState<AppMode>('view')
   const [showFixDiff, setShowFixDiff] = useState(false)
+  const [showShortcuts, setShowShortcuts] = useState(false)
 
   const {
     rawText,
@@ -65,6 +69,23 @@ function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
+
+  // Global keyboard listener for '?' to toggle shortcuts overlay
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if typing in an input/textarea or if modifiers other than shift are held
+      const target = e.target as HTMLElement
+      const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA'
+      if (isInput) return
+
+      if (e.key === '?' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault()
+        setShowShortcuts((v) => !v)
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
@@ -135,9 +156,17 @@ function App() {
           onToggleFixDiff={() => setShowFixDiff(v => !v)}
         />
       </div>
+      <div className={styles.urlFetchSection}>
+        <UrlFetch onDataLoaded={handleDataLoaded} />
+      </div>
       <div className={styles.dropSection}>
         <FileDropZone onDataLoaded={handleDataLoaded} />
       </div>
+      {parsedJson && (
+        <div className={styles.statsSection}>
+          <StatsPanel data={parsedJson} />
+        </div>
+      )}
     </div>
   )
 
@@ -164,11 +193,14 @@ function App() {
   )
 
   return (
-    <Layout
-      header={header}
-      sidebar={mode === 'view' ? sidebar : null}
-      main={mode === 'view' ? main : <JsonCompare />}
-    />
+    <>
+      <Layout
+        header={header}
+        sidebar={mode === 'view' ? sidebar : null}
+        main={mode === 'view' ? main : <JsonCompare />}
+      />
+      <ShortcutsOverlay open={showShortcuts} onClose={() => setShowShortcuts(false)} />
+    </>
   )
 }
 
