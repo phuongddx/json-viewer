@@ -1,0 +1,215 @@
+.tableWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.info {
+  display: flex;
+  gap: 12px;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.rowCount,
+.colCount {
+  font-weight: 500;
+}
+
+.tableScroll {
+  flex: 1;
+  overflow: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Fira Code', 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.rowNumberHeader {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--bg-secondary);
+  border-bottom: 2px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: 8px 10px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 11px;
+  width: 40px;
+  min-width: 40px;
+}
+
+.th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg-secondary);
+  border-bottom: 2px solid var(--border);
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.th:hover {
+  background: var(--accent-subtle);
+}
+
+.headerText {
+  font-weight: 600;
+}
+
+.sortIndicator {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-left: 4px;
+}
+
+.tr:hover {
+  background: var(--accent-subtle);
+}
+
+.tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tr:nth-child(even):hover {
+  background: var(--accent-subtle);
+}
+
+.rowNumber {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  padding: 6px 10px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 11px;
+  width: 40px;
+  min-width: 40px;
+}
+
+/* Keep row number bg on hover */
+.tr:hover .rowNumber {
+  background: var(--accent-subtle);
+}
+.tr:nth-child(even) .rowNumber {
+  background: rgba(255, 255, 255, 0.02);
+}
+.tr:nth-child(even):hover .rowNumber {
+  background: var(--accent-subtle);
+}
+
+.td {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  max-width: 400px;
+  vertical-align: top;
+}
+
+/* Cell type coloring (matches json-viewer syntax theme) */
+.cell-string {
+  color: #34D399;
+}
+
+.cell-number {
+  color: #FBBF24;
+}
+
+.cell-boolean {
+  color: #A78BFA;
+}
+
+.cell-null {
+  color: #F87171;
+  font-style: italic;
+}
+
+.cell-object {
+  color: var(--text-primary);
+}
+
+/* Light theme type colors */
+[data-theme="light"] .cell-string {
+  color: #059669;
+}
+
+[data-theme="light"] .cell-number {
+  color: #D97706;
+}
+
+[data-theme="light"] .cell-boolean {
+  color: #7C3AED;
+}
+
+[data-theme="light"] .cell-null {
+  color: #DC2626;
+}
+
+.cellTruncated {
+  cursor: pointer;
+}
+
+.cellExpanded {
+  cursor: pointer;
+  word-break: break-all;
+}
+
+.expandHint {
+  font-size: 11px;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 40px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Make row number sticky work with scrolling */
+.tableScroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 600px) {
+  .th {
+    padding: 6px 8px;
+    font-size: 11px;
+    min-width: 60px;
+  }
+
+  .td {
+    padding: 4px 8px;
+    font-size: 11px;
+    max-width: 200px;
+  }
+
+  .rowNumber,
+  .rowNumberHeader {
+    width: 30px;
+    min-width: 30px;
+    padding: 4px 6px;
+  }
+}

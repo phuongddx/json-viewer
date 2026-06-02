@@ -1,6 +1,6 @@
 /**
  * Unit tests for JsonViewerComponent
- * Covers expand/collapse all functionality and theme propagation
+ * Covers expand/collapse all, theme propagation, view modes, and minify toggle
  */
 
 import { render, screen } from '@testing-library/react'
@@ -70,5 +70,46 @@ describe('JsonViewerComponent', () => {
     const afterExpand = screen.getByTestId('json-viewer')
     await userEvent.click(screen.getByRole('button', { name: /collapse all/i }))
     expect(screen.getByTestId('json-viewer')).not.toBe(afterExpand)
+  })
+
+  it('defaults to tree view mode', () => {
+    render(<JsonViewerComponent data={sampleData} />)
+    expect(screen.getByTestId('json-viewer')).toBeInTheDocument()
+    expect(screen.queryByText('"name"')).not.toBeInTheDocument()
+  })
+
+  it('switches to raw view mode when Raw button clicked', async () => {
+    render(<JsonViewerComponent data={sampleData} />)
+    await userEvent.click(screen.getByRole('button', { name: /raw view/i }))
+    // Tree viewer should not be rendered in raw mode
+    expect(screen.queryByTestId('json-viewer')).not.toBeInTheDocument()
+    // Raw content should contain the JSON data
+    expect(screen.getByText(/"name"/)).toBeInTheDocument()
+  })
+
+  it('switches to split view mode showing both tree and raw', async () => {
+    render(<JsonViewerComponent data={sampleData} />)
+    await userEvent.click(screen.getByRole('button', { name: /split view/i }))
+    // Tree viewer should be present
+    expect(screen.getByTestId('json-viewer')).toBeInTheDocument()
+    // Should show Tree and Raw split labels
+    expect(screen.getAllByText('Tree').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Raw').length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('minify button toggles between minified and pretty JSON', async () => {
+    render(<JsonViewerComponent data={sampleData} />)
+    // Switch to raw view first
+    await userEvent.click(screen.getByRole('button', { name: /raw view/i }))
+
+    // Minify button should exist
+    const minifyButton = screen.getByRole('button', { name: /show minified json/i })
+    expect(minifyButton).toBeInTheDocument()
+
+    // Click minify
+    await userEvent.click(minifyButton)
+
+    // Button should now say "Pretty" (aria-label changes to "Show pretty-printed JSON")
+    expect(screen.getByRole('button', { name: /show pretty-printed json/i })).toBeInTheDocument()
   })
 })
