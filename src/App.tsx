@@ -4,12 +4,13 @@ import { JsonInput } from './components/json-input'
 import { JsonViewerComponent } from './components/json-viewer/json-viewer-component'
 import { FileDropZone } from './components/file-drop-zone'
 import { JsonCompare } from './components/json-compare/json-compare'
+import { SchemaValidator } from './components/schema-validator'
 import { useJsonState } from './hooks/use-json-state'
 import { useJsonRepair } from './hooks/use-json-repair'
 import styles from './App.module.css'
 
 type Theme = 'light' | 'dark'
-type AppMode = 'view' | 'compare'
+type AppMode = 'view' | 'compare' | 'validate'
 
 /* Inline SVG icons — no emoji, no external dependency */
 const SunIcon = () => (
@@ -51,6 +52,9 @@ function App() {
     isValid,
     previousText,
     updateText,
+    handlePaste,
+    autoDetected,
+    dismissAutoDetected,
     beautifyJson,
     minifyJson,
     applyFix,
@@ -102,6 +106,12 @@ function App() {
           >
             Compare
           </button>
+          <button
+            className={`${styles.modeTab} ${mode === 'validate' ? styles.modeTabActive : ''}`}
+            onClick={() => setMode('validate')}
+          >
+            Validate
+          </button>
         </div>
         <button
           className={styles.themeBtn}
@@ -125,6 +135,9 @@ function App() {
           onBeautify={beautifyJson}
           onMinify={minifyJson}
           onClear={() => { clearAll(); setShowFixDiff(false) }}
+          onPaste={handlePaste}
+          autoDetected={autoDetected}
+          onDismissAutoDetected={dismissAutoDetected}
           hasFixAvailable={!!repairResult}
           onApplyFix={() => { if (repairResult) { applyFix(repairResult.repairedText); setShowFixDiff(false) } }}
           onUndo={() => { undoText(); setShowFixDiff(false) }}
@@ -167,7 +180,7 @@ function App() {
     <Layout
       header={header}
       sidebar={mode === 'view' ? sidebar : null}
-      main={mode === 'view' ? main : <JsonCompare />}
+      main={mode === 'view' ? main : mode === 'compare' ? <JsonCompare /> : <SchemaValidator />}
     />
   )
 }
