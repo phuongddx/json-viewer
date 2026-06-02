@@ -1,4 +1,4 @@
-import type { ChangeEvent } from 'react'
+import type { ChangeEvent, ClipboardEvent } from 'react'
 import styles from './json-input.module.css'
 import { FixSuggestionBanner } from './fix-suggestion-banner'
 
@@ -7,9 +7,12 @@ export interface JsonInputProps {
   error: string | null
   isValid: boolean
   onChange: (text: string) => void
+  onPaste?: (pastedText: string) => boolean
   onBeautify: () => void
   onMinify: () => void
   onClear: () => void
+  // Auto-detect notification
+  autoDetectNotification?: string | null
   // Fix suggestion props (optional — not needed in compare mode)
   hasFixAvailable?: boolean
   onApplyFix?: () => void
@@ -28,9 +31,11 @@ export function JsonInput({
   error,
   isValid,
   onChange,
+  onPaste,
   onBeautify,
   onMinify,
   onClear,
+  autoDetectNotification,
   hasFixAvailable = false,
   onApplyFix,
   onUndo,
@@ -43,6 +48,19 @@ export function JsonInput({
 }: JsonInputProps) {
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value)
+  }
+
+  const handlePaste = (e: ClipboardEvent<HTMLTextAreaElement>) => {
+    if (!onPaste) return
+
+    const pastedText = e.clipboardData.getData('text')
+    if (!pastedText) return
+
+    const wasDetected = onPaste(pastedText)
+    if (wasDetected) {
+      // Prevent default paste since we extracted and set the JSON ourselves
+      e.preventDefault()
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -89,11 +107,19 @@ export function JsonInput({
           className={styles.textarea}
           value={value}
           onChange={handleChange}
+          onPaste={handlePaste}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           spellCheck={false}
         />
       </div>
+
+      {autoDetectNotification && (
+        <div className={styles.autoDetectBanner}>
+          <span className={styles.autoDetectIcon}>✓</span>
+          <span className={styles.autoDetectText}>{autoDetectNotification}</span>
+        </div>
+      )}
 
       {error && (
         <div className={styles.errorContainer}>
@@ -114,7 +140,7 @@ export function JsonInput({
         />
       )}
 
-      {value && !error && (
+      {value && !error && !autoDetectNotification && (
         <div className={`${styles.status} ${styles.statusValid}`}>
           Valid JSON
         </div>

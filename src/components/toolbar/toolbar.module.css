@@ -47,6 +47,12 @@
   transform: scale(0.97);
 }
 
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .button.success {
   background-color: var(--success);
   border-color: var(--success);

@@ -176,3 +176,39 @@
   border-color: var(--accent);
   color: var(--accent);
 }
+
+/* Auto-detect notification — subtle success banner shown on paste detection */
+.autoDetectBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background-color: var(--success-subtle);
+  border: 1px solid var(--success);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+  animation: fadeIn 0.2s ease;
+}
+
+.autoDetectIcon {
+  font-size: 13px;
+  color: var(--success);
+  font-weight: 600;
+}
+
+.autoDetectText {
+  font-size: 12px;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
