@@ -1,1 +1,1 @@
-export { CopyPathOverlay } from './copy-path-overlay'
+export { CopyPathOverlay, formatPath } from './copy-path-overlay'

@@ -1,56 +1,41 @@
-import { useState, useEffect, useCallback } from 'react'
 import styles from './copy-path-overlay.module.css'
 
+/** Convert a Path array to a dotted JSON path string */
+export function formatPath(path: (string | number)[]): string {
+  if (!path || path.length === 0) return 'root'
+
+  let result = 'root'
+  for (const segment of path) {
+    if (typeof segment === 'number') {
+      result += `[${segment}]`
+    } else {
+      result += `.${segment}`
+    }
+  }
+  return result
+}
+
 interface CopyPathOverlayProps {
-  path: string
+  /** The copied path string to display */
+  copiedPath: string | null
+  /** Callback to dismiss the toast */
   onDismiss: () => void
 }
 
-export function CopyPathOverlay({ path, onDismiss }: CopyPathOverlayProps) {
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    // Trigger entrance animation
-    requestAnimationFrame(() => setVisible(true))
-
-    const timer = setTimeout(() => {
-      setVisible(false)
-      setTimeout(onDismiss, 300) // Wait for exit animation
-    }, 2000)
-
-    return () => clearTimeout(timer)
-  }, [onDismiss])
-
-  const handleCopy = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(path)
-    } catch {
-      // Fallback for older browsers
-      const textarea = document.createElement('textarea')
-      textarea.value = path
-      textarea.style.position = 'fixed'
-      textarea.style.opacity = '0'
-      document.body.appendChild(textarea)
-      textarea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textarea)
-    }
-  }, [path])
-
-  useEffect(() => {
-    handleCopy()
-  }, [handleCopy])
+export function CopyPathOverlay({ copiedPath, onDismiss }: CopyPathOverlayProps) {
+  if (!copiedPath) return null
 
   return (
     <div
-      className={`${styles.toast} ${visible ? styles.visible : ''}`}
+      className={styles.toast}
+      onClick={onDismiss}
       role="status"
       aria-live="polite"
     >
       <svg
         className={styles.icon}
-        width="14"
-        height="14"
+        width="16"
+        height="16"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -59,10 +44,11 @@ export function CopyPathOverlay({ path, onDismiss }: CopyPathOverlayProps) {
         strokeLinejoin="round"
         aria-hidden="true"
       >
-        <polyline points="20 6 9 17 4 12" />
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
       </svg>
-      <span className={styles.label}>Path copied</span>
-      <code className={styles.path}>{path}</code>
+      <span className={styles.pathText}>{copiedPath}</span>
+      <span className={styles.hint}>copied to clipboard</span>
     </div>
   )
 }
