@@ -6,6 +6,41 @@
   background-color: var(--bg-primary);
 }
 
+.toolbarRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.searchResults,
+.noResults {
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.searchResults {
+  background: var(--success-subtle);
+  color: var(--success);
+}
+
+.noResults {
+  background: var(--warning-subtle);
+  color: var(--warning);
+}
+
+.searchResultText {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 /* Monospace viewer with generous line-height for readability */
 .viewer {
   flex: 1;
@@ -41,6 +76,19 @@
 
 .viewer :global(.json-null) {
   color: #F87171 !important; /* red-400 */
+}
+
+/* Search highlight animation */
+.viewer :global(.search-highlight) {
+  background-color: rgba(250, 204, 21, 0.3);
+  border-radius: 2px;
+  padding: 1px 2px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { background-color: rgba(250, 204, 21, 0.2); }
+  50% { background-color: rgba(250, 204, 21, 0.4); }
 }
 
 /* Lighten syntax colors for light theme readability */
