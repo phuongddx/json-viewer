@@ -1,20 +1,23 @@
 /**
  * JSON Viewer component
  * Displays JSON data in an interactive tree view using @textea/json-viewer
- * With integrated search functionality
+ * With integrated search functionality and copy-path feature
  */
 
 import { useState, useCallback, useMemo } from 'react'
-import { JsonViewer } from '@textea/json-viewer'
+import { JsonViewer, type Path } from '@textea/json-viewer'
 import { Toolbar } from '../toolbar/toolbar'
 import { SearchBar } from '../search-bar'
 import { searchJson } from '../../utils/json-search'
+import { CopyPathOverlay, formatPath } from '../copy-path-overlay'
 import styles from './json-viewer.module.css'
 
 /** Default depth for initial tree expansion */
 const DEFAULT_DEPTH = 2
 /** Large depth value to expand all nodes */
 const EXPAND_ALL_DEPTH = 100
+/** Toast auto-dismiss delay (ms) — match CSS animation */
+const TOAST_DURATION = 2500
 
 interface JsonViewerComponentProps {
   data: unknown
@@ -30,6 +33,10 @@ export function JsonViewerComponent({ data, theme = 'dark', onThemeChange }: Jso
   // Search state
   const [searchQuery, setSearchQuery] = useState('')
   const [currentMatchIndex, setCurrentMatchIndex] = useState(0)
+
+  // Copy-path toast state
+  const [copiedPath, setCopiedPath] = useState<string | null>(null)
+  const dismissTimer = useMemo(() => ({ current: undefined as ReturnType<typeof setTimeout> | undefined }), [])
 
   const handleExpandAll = useCallback(() => {
     setInspectDepth(EXPAND_ALL_DEPTH)
@@ -67,6 +74,31 @@ export function JsonViewerComponent({ data, theme = 'dark', onThemeChange }: Jso
       }
     })
   }, [searchMatches.length])
+
+  /** Intercept copy action: copy path string to clipboard and show toast */
+  const handleCopy = useCallback(
+    async (path: Path, _value: unknown, copy: (text: string) => Promise<void>) => {
+      const pathStr = formatPath(path)
+      await copy(pathStr)
+
+      // Clear any existing dismiss timer
+      if (dismissTimer.current) {
+        clearTimeout(dismissTimer.current)
+      }
+      setCopiedPath(pathStr)
+      dismissTimer.current = setTimeout(() => {
+        setCopiedPath(null)
+      }, TOAST_DURATION)
+    },
+    [dismissTimer],
+  )
+
+  const handleDismissToast = useCallback(() => {
+    if (dismissTimer.current) {
+      clearTimeout(dismissTimer.current)
+    }
+    setCopiedPath(null)
+  }, [dismissTimer])
 
   const jsonString = JSON.stringify(data, null, 2)
 
@@ -112,8 +144,11 @@ export function JsonViewerComponent({ data, theme = 'dark', onThemeChange }: Jso
           displayDataTypes={true}
           editable={false}
           enableClipboard={true}
+          onCopy={handleCopy}
         />
       </div>
+
+      <CopyPathOverlay copiedPath={copiedPath} onDismiss={handleDismissToast} />
     </div>
   )
 }
