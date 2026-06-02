@@ -1,22 +1,38 @@
 /**
  * Toolbar component for JSON Viewer
- * Provides controls for copy, expand/collapse, and theme toggle
+ * Provides controls for copy, expand/collapse, theme toggle, and CSV export
  */
 
 import { useState } from 'react'
+import { jsonToCsv } from '../../utils/json-to-csv'
 import styles from './toolbar.module.css'
 
 interface ToolbarProps {
   onExpandAll: () => void
   onCollapseAll: () => void
   jsonData: string
+  parsedData?: unknown
   theme?: 'light' | 'dark'
   onThemeChange?: (theme: 'light' | 'dark') => void
 }
 
-export function Toolbar({ onExpandAll, onCollapseAll, jsonData, theme = 'dark', onThemeChange }: ToolbarProps) {
+export function Toolbar({ onExpandAll, onCollapseAll, jsonData, parsedData, theme = 'dark', onThemeChange }: ToolbarProps) {
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle')
   const isDark = theme === 'dark'
+
+  const isCsvExportable = Array.isArray(parsedData) && parsedData.length > 0
+
+  const handleExportCsv = () => {
+    if (!isCsvExportable) return
+    const csv = jsonToCsv(parsedData)
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'data.csv'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   const handleCopy = async () => {
     try {
@@ -66,6 +82,15 @@ export function Toolbar({ onExpandAll, onCollapseAll, jsonData, theme = 'dark', 
           aria-label="Collapse all nodes"
         >
           Collapse All
+        </button>
+        <button
+          onClick={handleExportCsv}
+          className={styles.button}
+          disabled={!isCsvExportable}
+          aria-label="Export as CSV"
+          title={isCsvExportable ? 'Export as CSV' : 'Requires an array of objects'}
+        >
+          Export CSV
         </button>
       </div>
       <button

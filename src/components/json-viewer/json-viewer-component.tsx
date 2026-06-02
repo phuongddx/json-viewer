@@ -1,14 +1,17 @@
 /**
  * JSON Viewer component
  * Displays JSON data in an interactive tree view using @textea/json-viewer
- * With integrated search functionality
+ * With integrated search functionality and copy-path support
  */
 
 import { useState, useCallback, useMemo } from 'react'
 import { JsonViewer } from '@textea/json-viewer'
+import type { Path } from '@textea/json-viewer'
 import { Toolbar } from '../toolbar/toolbar'
 import { SearchBar } from '../search-bar'
+import { CopyPathOverlay } from '../copy-path-overlay'
 import { searchJson } from '../../utils/json-search'
+import { pathToString } from '../../utils/path-utils'
 import styles from './json-viewer.module.css'
 
 /** Default depth for initial tree expansion */
@@ -30,6 +33,9 @@ export function JsonViewerComponent({ data, theme = 'dark', onThemeChange }: Jso
   // Search state
   const [searchQuery, setSearchQuery] = useState('')
   const [currentMatchIndex, setCurrentMatchIndex] = useState(0)
+
+  // Copy-path state
+  const [copiedPath, setCopiedPath] = useState<string | null>(null)
 
   const handleExpandAll = useCallback(() => {
     setInspectDepth(EXPAND_ALL_DEPTH)
@@ -67,6 +73,22 @@ export function JsonViewerComponent({ data, theme = 'dark', onThemeChange }: Jso
       }
     })
   }, [searchMatches.length])
+
+  // Copy node path handler — called when user clicks the copy icon on a node
+  const handleCopy = useCallback(
+    (path: Path, _value: unknown, copy: (value: string) => Promise<void>) => {
+      const pathStr = pathToString(path)
+      // Copy the path string to clipboard via the overlay
+      setCopiedPath(pathStr)
+      // Also invoke the default copy with the path string so it goes to clipboard
+      return copy(pathStr)
+    },
+    [],
+  )
+
+  const handleDismissCopyOverlay = useCallback(() => {
+    setCopiedPath(null)
+  }, [])
 
   const jsonString = JSON.stringify(data, null, 2)
 
@@ -112,8 +134,16 @@ export function JsonViewerComponent({ data, theme = 'dark', onThemeChange }: Jso
           displayDataTypes={true}
           editable={false}
           enableClipboard={true}
+          onCopy={handleCopy}
         />
       </div>
+
+      {copiedPath && (
+        <CopyPathOverlay
+          path={copiedPath}
+          onDismiss={handleDismissCopyOverlay}
+        />
+      )}
     </div>
   )
 }

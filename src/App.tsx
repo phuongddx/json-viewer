@@ -50,7 +50,9 @@ function App() {
     error,
     isValid,
     previousText,
+    autoDetectNotification,
     updateText,
+    handlePaste,
     beautifyJson,
     minifyJson,
     applyFix,
@@ -122,9 +124,11 @@ function App() {
           error={error}
           isValid={isValid}
           onChange={(text) => { updateText(text); setShowFixDiff(false) }}
+          onPaste={handlePaste}
           onBeautify={beautifyJson}
           onMinify={minifyJson}
           onClear={() => { clearAll(); setShowFixDiff(false) }}
+          autoDetectNotification={autoDetectNotification}
           hasFixAvailable={!!repairResult}
           onApplyFix={() => { if (repairResult) { applyFix(repairResult.repairedText); setShowFixDiff(false) } }}
           onUndo={() => { undoText(); setShowFixDiff(false) }}
