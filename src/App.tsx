@@ -54,8 +54,7 @@ function App() {
     previousText,
     updateText,
     handlePaste,
-    autoDetected,
-    dismissAutoDetected,
+    autoDetectNotification,
     beautifyJson,
     minifyJson,
     applyFix,
@@ -143,8 +142,7 @@ function App() {
           onMinify={minifyJson}
           onClear={() => { clearAll(); setShowFixDiff(false) }}
           onPaste={handlePaste}
-          autoDetected={autoDetected}
-          onDismissAutoDetected={dismissAutoDetected}
+          autoDetectNotification={autoDetectNotification}
           hasFixAvailable={!!repairResult}
           onApplyFix={() => { if (repairResult) { applyFix(repairResult.repairedText); setShowFixDiff(false) } }}
           onUndo={() => { undoText(); setShowFixDiff(false) }}
