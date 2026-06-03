@@ -4,13 +4,14 @@ import { JsonInput } from './components/json-input'
 import { JsonViewerComponent } from './components/json-viewer/json-viewer-component'
 import { FileDropZone } from './components/file-drop-zone'
 import { JsonCompare } from './components/json-compare/json-compare'
+import { TextCompare } from './components/text-compare/text-compare'
 import { SchemaValidator } from './components/schema-validator'
 import { useJsonState } from './hooks/use-json-state'
 import { useJsonRepair } from './hooks/use-json-repair'
 import styles from './App.module.css'
 
 type Theme = 'light' | 'dark'
-type AppMode = 'view' | 'compare' | 'validate'
+type AppMode = 'view' | 'compare' | 'text' | 'validate'
 
 /* Inline SVG icons — no emoji, no external dependency */
 const SunIcon = () => (
@@ -107,6 +108,12 @@ function App() {
             Compare
           </button>
           <button
+            className={`${styles.modeTab} ${mode === 'text' ? styles.modeTabActive : ''}`}
+            onClick={() => setMode('text')}
+          >
+            Text
+          </button>
+          <button
             className={`${styles.modeTab} ${mode === 'validate' ? styles.modeTabActive : ''}`}
             onClick={() => setMode('validate')}
           >
@@ -180,7 +187,7 @@ function App() {
     <Layout
       header={header}
       sidebar={mode === 'view' ? sidebar : null}
-      main={mode === 'view' ? main : mode === 'compare' ? <JsonCompare /> : <SchemaValidator />}
+      main={mode === 'view' ? main : mode === 'compare' ? <JsonCompare /> : mode === 'text' ? <TextCompare /> : <SchemaValidator />}
     />
   )
 }

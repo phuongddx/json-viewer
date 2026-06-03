@@ -1,0 +1,339 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Input panels ── */
+.panels {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  gap: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--bg-elevated);
+  flex-shrink: 0;
+}
+
+.panelLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.panelActions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.actionBtn {
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.actionBtn:hover:not(:disabled) {
+  background-color: var(--accent-subtle);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.actionBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.textarea {
+  flex: 1;
+  resize: none;
+  border: none;
+  outline: none;
+  padding: 0.75rem;
+  font-family: 'Fira Code', 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  tab-size: 2;
+}
+
+.textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ── Center swap button ── */
+.centerActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.25rem;
+  flex-shrink: 0;
+  background-color: var(--bg-secondary);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+.swapBtn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.swapBtn:hover {
+  background-color: var(--accent-subtle);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Diff output section ── */
+.diffSection {
+  flex-shrink: 0;
+  max-height: 50%;
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  background-color: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+}
+
+.placeholder {
+  padding: 2rem;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.identical {
+  padding: 1rem;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--success);
+  background-color: var(--success-subtle);
+}
+
+/* ── Stats bar ── */
+.statsBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--bg-elevated);
+  flex-shrink: 0;
+}
+
+.stats {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.statAdded {
+  color: var(--success);
+}
+
+.statRemoved {
+  color: var(--error);
+}
+
+.statUnchanged {
+  color: var(--text-muted);
+}
+
+.diffModeToggle {
+  display: flex;
+  gap: 2px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.modeBtn {
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.modeBtn:hover {
+  color: var(--text-primary);
+}
+
+.modeBtnActive {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.modeBtnActive:hover {
+  color: #fff;
+}
+
+/* ── Diff content ── */
+.diffContent {
+  flex: 1;
+  overflow: auto;
+  font-family: 'Fira Code', 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.diffTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.diffRow:hover {
+  background-color: var(--bg-elevated);
+}
+
+.lineNum {
+  width: 48px;
+  min-width: 48px;
+  padding: 0 8px;
+  text-align: right;
+  color: var(--text-muted);
+  user-select: none;
+  border-right: 1px solid var(--border-subtle);
+  font-size: 11px;
+  vertical-align: top;
+}
+
+.lineNumRemove {
+  background-color: var(--error-subtle);
+  color: var(--error);
+}
+
+.lineNumAdd {
+  background-color: var(--success-subtle);
+  color: var(--success);
+}
+
+.lineContent {
+  padding: 0 12px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  vertical-align: top;
+}
+
+.lineRemove {
+  background-color: var(--error-subtle);
+  color: var(--error);
+}
+
+.lineAdd {
+  background-color: var(--success-subtle);
+  color: var(--success);
+}
+
+.linePrefix {
+  display: inline-block;
+  width: 1em;
+  color: var(--text-muted);
+  user-select: none;
+  font-weight: 600;
+}
+
+/* ── Split view ── */
+.splitContainer {
+  display: flex;
+  height: 100%;
+}
+
+.splitPane {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  border-right: 1px solid var(--border);
+}
+
+.splitPane:last-child {
+  border-right: none;
+}
+
+.splitHeader {
+  padding: 0.375rem 0.75rem;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background-color: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .panels {
+    flex-direction: column;
+  }
+
+  .centerActions {
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0.25rem;
+  }
+
+  .swapBtn {
+    transform: rotate(90deg);
+  }
+
+  .diffSection {
+    max-height: none;
+  }
+
+  .splitContainer {
+    flex-direction: column;
+  }
+
+  .splitPane {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
